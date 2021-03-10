@@ -2,6 +2,10 @@
 
 ## Configurations
 
+This extends the original configurability of the provider by adding both a `baseUrl`, which may be your CDN URL, which replaces the endpoint returned from AWS with a custom URL, and `prefix`, which does exactly that: prefixes the object's path such that we do not strictly upload into the buckets root directory. This can be used to keep the bucket organized.
+
+Everything else follows the regular strapi-provider-upload-aws-s3 schema.
+
 Your configuration is passed down to the provider. (e.g: `new AWS.S3(config)`). You can see the complete list of options [here](https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/S3.html#constructor-property)
 
 See the [using a provider](https://strapi.io/documentation/developer-docs/latest/development/plugins/upload.html#using-a-provider) documentation for information on installing and using a provider. And see the [environment variables](https://strapi.io/documentation/developer-docs/latest/setup-deployment-guides/configurations.html#environment-variables) for setting and using environment variables in your configs.
