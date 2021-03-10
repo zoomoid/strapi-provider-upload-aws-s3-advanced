@@ -1,7 +1,7 @@
 {
-  "name": "strapi-provider-upload-aws-s3",
+  "name": "strapi-provider-upload-aws-s3-advanced",
   "version": "3.5.2",
-  "description": "AWS S3 provider for strapi upload",
+  "description": "AWS S3 provider for strapi upload with more advanced configuration options",
   "homepage": "https://strapi.io",
   "keywords": [
     "upload",
@@ -21,31 +21,30 @@
     "isProvider": true
   },
   "author": {
-    "email": "hi@strapi.io",
-    "name": "Strapi team",
-    "url": "https://strapi.io"
+    "email": "alexander.bartolomey@anny.co",
+    "name": "Alexander Bartolomey",
+    "url": "https://anny.co"
   },
   "maintainers": [
     {
-      "name": "Strapi team",
-      "email": "hi@strapi.io",
-      "url": "https://strapi.io"
+      "name": "Alexander Bartolomey",
+      "email": "alexander.bartolomey@anny.co",
+      "url": "https://anny.co"
     }
   ],
   "repository": {
     "type": "git",
-    "url": "git://github.com/strapi/strapi.git"
+    "url": "git://github.com/zoomoid/strapi-provider-upload-aws-s3-advanced.git"
   },
   "bugs": {
-    "url": "https://github.com/strapi/strapi/issues"
+    "url": "https://github.com/zoomoid/strapi-provider-upload-aws-s3-advanced/issues"
   },
   "engines": {
     "node": ">=10.16.0 <=14.x.x",
     "npm": ">=6.0.0"
   },
-  "license": "SEE LICENSE IN LICENSE",
+  "license": "SEE THE STRAPI CE LICENSE",
   "scripts": {
     "test": "echo \"no tests yet\""
-  },
-  "gitHead": "231263a3535658bab1e9492c6aaaed8692d62a53"
+  }
 }
