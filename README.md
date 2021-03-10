@@ -1,4 +1,4 @@
-# strapi-provider-upload-aws-s3
+# strapi-provider-upload-aws-s3-advanced
 
 ## Configurations
 
@@ -14,7 +14,7 @@ See the [using a provider](https://strapi.io/documentation/developer-docs/latest
 module.exports = ({ env }) => ({
   // ...
   upload: {
-    provider: 'aws-s3',
+    provider: 'aws-s3-advanced',
     providerOptions: {
       accessKeyId: env('AWS_ACCESS_KEY_ID'),
       secretAccessKey: env('AWS_ACCESS_SECRET'),
