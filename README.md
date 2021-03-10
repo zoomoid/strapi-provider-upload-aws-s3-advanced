@@ -22,6 +22,8 @@ module.exports = ({ env }) => ({
       params: {
         Bucket: env('AWS_BUCKET'),
       },
+      baseUrl: env('CDN_BASE_URL'), // e.g. https://cdn.example.com, this is stored in strapi's database to point to the file
+      prefix: env('BUCKET_PREFIX') // e.g. strapi-assets, note the missing slash at the start
     },
   },
   // ...
