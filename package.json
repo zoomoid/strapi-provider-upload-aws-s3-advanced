@@ -43,7 +43,7 @@
     "node": ">=10.16.0 <=14.x.x",
     "npm": ">=6.0.0"
   },
-  "license": "SEE THE STRAPI CE LICENSE",
+  "license": "SEE THE STRAPI LICENSE",
   "scripts": {
     "test": "echo \"no tests yet\""
   }
