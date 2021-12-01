@@ -14,8 +14,7 @@
   },
   "main": "./lib",
   "dependencies": {
-    "aws-sdk": "2.857.0",
-    "lodash": "4.17.20"
+    "@aws-sdk/client-s3": "^3.43.0"
   },
   "strapi": {
     "isProvider": true
