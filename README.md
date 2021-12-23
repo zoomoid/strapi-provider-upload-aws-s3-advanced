@@ -13,7 +13,6 @@ See the [using a provider](https://strapi.io/documentation/developer-docs/latest
 **Example**
 
 `./config/plugins.js`
-
 ```js
 module.exports = ({ env }) => ({
   // ...
@@ -24,14 +23,76 @@ module.exports = ({ env }) => ({
       secretAccessKey: env('AWS_ACCESS_SECRET'),
       region: env('AWS_REGION'),
       params: {
-        Bucket: env('AWS_BUCKET'),
+        bucket: env('AWS_BUCKET'),
       },
       baseUrl: env('CDN_BASE_URL'), // e.g. https://cdn.example.com, this is stored in strapi's database to point to the file
-      prefix: env('BUCKET_PREFIX') // e.g. strapi-assets, note the missing slash at the start
+      prefix: env('BUCKET_PREFIX'), // e.g. strapi-assets, note the missing slash at the start
     },
   },
   // ...
 });
+```
+
+### Strapi v4
+
+If using >4.0.0, please use the below config:
+
+`./config/plugins.js`
+```js
+module.exports = ({ env }) => ({
+  // ...
+  upload: {
+    config: {
+      provider: 'strapi-provider-upload-aws-s3-advanced',
+      providerOptions: {
+        accessKeyId: env('AWS_ACCESS_KEY_ID'),
+        secretAccessKey: env('AWS_ACCESS_SECRET'),
+        region: env('AWS_REGION'),
+        params: {
+          bucket: env('AWS_BUCKET'),
+        },
+        baseUrl: env('CDN_BASE_URL'), // e.g. https://cdn.example.com, this is stored in strapi's database to point to the file
+        prefix: env('BUCKET_PREFIX'), // e.g. strapi-assets, note the missing slash at the start
+      },
+    },
+  },
+  // ...
+});
+```
+#### Image Previews
+
+To allow the thumbnails to properly populate, add the below config to
+
+`./config/plugins.js`
+```js
+module.exports = ({env}) => ([
+  // ...
+  {
+    name: 'strapi::security',
+    config: {
+      contentSecurityPolicy: {
+        useDefaults: true,
+        directives: {
+          'connect-src': ["'self'", 'https:'],
+          'img-src': [
+            "'self'",
+            'data:',
+            'blob:',
+            `${env('CF_BASE_URL')}`
+          ],
+          'media-src': [
+            "'self'",
+            'data:',
+            'blob:',
+            `${env('CF_BASE_URL')}`
+          ],
+          upgradeInsecureRequests: null,
+        },
+      },
+    },
+  },
+  // ...
+]);
 ```
 
 ## Resources
@@ -43,3 +104,4 @@ module.exports = ({ env }) => ({
 - [Strapi website](https://strapi.io/)
 - [Strapi community on Slack](https://slack.strapi.io)
 - [Strapi news on Twitter](https://twitter.com/strapijs)
+```
