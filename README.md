@@ -33,8 +33,6 @@ module.exports = ({ env }) => ({
 });
 ```
 
-### Strapi v4
-
 If using >4.0.0, please use the below config:
 
 `./config/plugins.js`
@@ -63,7 +61,7 @@ module.exports = ({ env }) => ({
 
 To allow the thumbnails to properly populate, add the below config to
 
-`./config/plugins.js`
+`./config/middlewares.js`
 ```js
 module.exports = ({env}) => ([
   // ...
@@ -78,13 +76,13 @@ module.exports = ({env}) => ([
             "'self'",
             'data:',
             'blob:',
-            `${env('CF_BASE_URL')}`
+            `${env('CDN_BASE_URL')}`
           ],
           'media-src': [
             "'self'",
             'data:',
             'blob:',
-            `${env('CF_BASE_URL')}`
+            `${env('CDN_BASE_URL')}`
           ],
           upgradeInsecureRequests: null,
         },
