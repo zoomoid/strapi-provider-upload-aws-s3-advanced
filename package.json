@@ -1,6 +1,6 @@
 {
   "name": "strapi-provider-upload-aws-s3-advanced",
-  "version": "4.0.0-beta.1",
+  "version": "4.0.2",
   "description": "AWS S3 provider for strapi upload with more advanced configuration options",
   "homepage": "https://strapi.io",
   "keywords": [
@@ -42,7 +42,7 @@
     "node": ">=10.16.0 <=14.x.x",
     "npm": ">=6.0.0"
   },
-  "license": "SEE THE STRAPI LICENSE",
+  "license": "MIT",
   "scripts": {
     "test": "echo \"no tests yet\""
   }
