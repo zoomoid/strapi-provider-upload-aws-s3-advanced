@@ -1,6 +1,6 @@
 {
   "name": "strapi-provider-upload-aws-s3-advanced",
-  "version": "4.0.4",
+  "version": "4.0.5",
   "description": "AWS S3 provider for strapi upload with more advanced configuration options",
   "homepage": "https://strapi.io",
   "keywords": [
