@@ -20,16 +20,19 @@
     "isProvider": true
   },
   "author": {
-    "email": "alexander.bartolomey@anny.co",
+    "email": "occloxium@gmail.com",
     "name": "Alexander Bartolomey",
     "url": "https://anny.co"
   },
   "maintainers": [
     {
       "name": "Alexander Bartolomey",
-      "email": "alexander.bartolomey@anny.co",
-      "url": "https://anny.co"
+      "email": "occloxium@gmail.com",
+      "url": "https://alexander.bartolomey.me"
     }
+  ],
+  "files": [
+    "lib/*"
   ],
   "repository": {
     "type": "git",
@@ -45,5 +48,13 @@
   "license": "MIT",
   "scripts": {
     "test": "echo \"no tests yet\""
+  },
+  "devDependencies": {
+    "mocha": "^9.2.1"
+  },
+  "mocha": {
+    "spec": [
+      "spec/**/*.spec.js"
+    ]
   }
 }
