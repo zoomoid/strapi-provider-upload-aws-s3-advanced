@@ -92,6 +92,13 @@ module.exports = ({ env }) => [
 
 ## Migration
 
+### v4.1.0
+
+To allow for an empty `baseUrl` (#9), we made some adjustments to the way the configuration is parsed: in your `plugins.js`, `env("CDN_BASE_URL")` uses strapi's helper function for parsing ENV variables. If any second argument is omitted,
+`undefined` is returned. Thus, if your ENV does not contain any value for `CDN_BASE_URL`, you are good to go. Undefined `baseUrl` causes the plugin to prepend the cannonic default endpoint of your storage provider, e.g., `https://mystoragebucket.s3.amazonaws.com`.
+
+**If instead you defined `CDN_BASE_URL` to be `""`, the `env` helper returns that empty string.** Previously, this was treated as the same case as using `undefined`. In some scenarios however you might not want this, e.g., local development. **Thus, we now check explicitly for undefinedness instead of the prior truthiness.**. If you defined `CDN_BASE_URL` to be an empty string and relied upon the prepending of the cannonical default endpoint, change your ENV variable either explicitly to the endpoint's URL **or** make it undefined.
+
 ### v3.x to v4.0.x
 
 Strapi now uses the full package name as provider name, as seen in the configuration of the provider in the Example section above. This means that the relation will include different provider names when using the newer version of this provider with strapi >= 4.0.0 on data from pre-4.0.0. In particular, you will find that the pre-4.0.0 `files` will have the provider `aws-s3-advanved`, while the newer ones will have `strapi-provider-aws-s3-advanved`. **If you're not going to change the existing files in your CDN, you will not need to take any actions**. The provider attribute is only used for mapping the handler for creating or deleting files to the handlers defined in _this_ provider. Files will remain readable with the old provider and new files will be added with the new provider name. **Only if you want to delete old files from the new provider, you will be required to adapt the `files` table**.
