@@ -12,6 +12,8 @@ See the [using a provider](https://strapi.io/documentation/developer-docs/latest
 
 To upload with ACLs, **make sure that the S3 user has abilities "s3:PutObjectACL" in addition to the regular "s3:PutObject" ability**. Otherwise S3 will reject the upload with "Access Denied".
 
+If you cannot provide access key and secret, but instead use other (AWS) tools to authenticate to your bucket, omit `providerOptions.accessKeyId` and `providerOptions.secretAccessKey`. For more, see <https://github.com/zoomoid/strapi-provider-upload-aws-s3-advanced/pull/14>.
+
 ### Example
 
 `./config/plugins.js`
