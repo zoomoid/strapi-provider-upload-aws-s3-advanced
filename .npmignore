@@ -107,3 +107,5 @@ test
 tests
 __tests__
 jest.config.js
+
+.env

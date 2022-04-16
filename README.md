@@ -10,6 +10,8 @@ Your configuration is passed down to the provider. (e.g: `new AWS.S3(config)`). 
 
 See the [using a provider](https://strapi.io/documentation/developer-docs/latest/development/plugins/upload.html#using-a-provider) documentation for information on installing and using a provider. And see the [environment variables](https://strapi.io/documentation/developer-docs/latest/setup-deployment-guides/configurations.html#environment-variables) for setting and using environment variables in your configs.
 
+To upload with ACLs, **make sure that the S3 user has abilities "s3:PutObjectACL" in addition to the regular "s3:PutObject" ability**. Otherwise S3 will reject the upload with "Access Denied".
+
 ### Example
 
 `./config/plugins.js`
@@ -24,10 +26,11 @@ module.exports = ({ env }) => ({
       secretAccessKey: env("AWS_ACCESS_SECRET"),
       region: env("AWS_REGION"),
       params: {
-        bucket: env("AWS_BUCKET"),
+        bucket: env("AWS_BUCKET"), // or "Bucket", @aws-sdk requires capitalized properties, but the convention for this file is lowercased, but the plugin understands both
+        acl: env("AWS_BUCKET_ACL"), // or "ACL", see above
       },
-      baseUrl: env("CDN_BASE_URL"), // e.g. https://cdn.example.com, this is stored in strapi's database to point to the file
-      prefix: env("BUCKET_PREFIX"), // e.g. strapi-assets, note the missing slash at the start
+      baseUrl: env("CDN_BASE_URL"), // e.g. "https://cdn.example.com", this is stored in strapi's database to point to the file
+      prefix: env("BUCKET_PREFIX"), // e.g. "strapi-assets". If BUCKET_PREFIX contains leading or trailing slashes, they are removed internally to construct the URL safely
     },
   },
   // ...
@@ -49,16 +52,20 @@ module.exports = ({ env }) => ({
         secretAccessKey: env("AWS_ACCESS_SECRET"),
         region: env("AWS_REGION"),
         params: {
-          bucket: env("AWS_BUCKET"),
+          bucket: env("AWS_BUCKET"), // or "Bucket", @aws-sdk requires capitalized properties, but the convention for this file is lowercased, but the plugin understands both
+          acl: env("AWS_BUCKET_ACL"), // or "ACL", see above
         },
-        baseUrl: env("CDN_BASE_URL"), // e.g. https://cdn.example.com, this is stored in strapi's database to point to the file
-        prefix: env("BUCKET_PREFIX"), // e.g. strapi-assets, note the missing slash at the start
+        baseUrl: env("CDN_BASE_URL"), // e.g. "https://cdn.example.com", this is stored in strapi's database to point to the file
+        prefix: env("BUCKET_PREFIX"), // e.g. "strapi-assets". If BUCKET_PREFIX contains leading or trailing slashes, they are removed internally to construct the URL safely
       },
     },
   },
   // ...
 });
 ```
+
+If you need to extend the configuration of the S3 client with additional properties, put them into `providerOptions.params`. The `params` object is spread into the S3 configuration at initialization, so it will accept any
+additional configuration this way.
 
 > Note: If you are migrating from a pre-4.0.0 version (i.e. v3.6.8 or earlier), the `files` relation will include `aws-s3-advanced` as the provider. Previously, the prefix "strapi-upload-provider" was assumed to
 > always be present for upload provider plugins. _This is no longer the case in >= 4.0.0_, hence when uploading with the newer version of this provider, strapi will insert new files with the full provider package name, i.e., `strapi-provider-upload-aws-s3-advanced`. See [Migration](#migration) for details on the required manual work.
@@ -91,6 +98,13 @@ module.exports = ({ env }) => [
 ```
 
 ## Migration
+
+### v4.1.0
+
+To allow for an empty `baseUrl` (#9), we made some adjustments to the way the configuration is parsed: in your `plugins.js`, `env("CDN_BASE_URL")` uses strapi's helper function for parsing ENV variables. If any second argument is omitted,
+`undefined` is returned. Thus, if your ENV does not contain any value for `CDN_BASE_URL`, you are good to go. Undefined `baseUrl` causes the plugin to prepend the cannonic default endpoint of your storage provider, e.g., `https://mystoragebucket.s3.amazonaws.com`.
+
+**If instead you defined `CDN_BASE_URL` to be `""`, the `env` helper returns that empty string.** Previously, this was treated as the same case as using `undefined`. In some scenarios however you might not want this, e.g., local development. **Thus, we now check explicitly for undefinedness instead of the prior truthiness.**. If you defined `CDN_BASE_URL` to be an empty string and relied upon the prepending of the cannonical default endpoint, change your ENV variable either explicitly to the endpoint's URL **or** make it undefined.
 
 ### v3.x to v4.0.x
 

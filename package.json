@@ -20,15 +20,13 @@
     "isProvider": true
   },
   "author": {
-    "email": "alexander.bartolomey@anny.co",
-    "name": "Alexander Bartolomey",
-    "url": "https://anny.co"
+    "email": "occloxium@gmail.com",
+    "name": "Alexander Bartolomey"
   },
   "maintainers": [
     {
       "name": "Alexander Bartolomey",
-      "email": "alexander.bartolomey@anny.co",
-      "url": "https://anny.co"
+      "email": "occloxium@gmail.com"
     }
   ],
   "repository": {
