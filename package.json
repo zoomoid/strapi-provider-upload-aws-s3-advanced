@@ -17,12 +17,21 @@
     "@aws-sdk/client-s3": "^3.43.0",
     "@aws-sdk/lib-storage": "^3.100.0"
   },
+  "devDependencies": {
+    "@types/jest": "^29.2.4",
+    "@types/node": "^18.11.11",
+    "aws-sdk-client-mock": "^2.0.1",
+    "aws-sdk-client-mock-jest": "^2.0.1",
+    "jest": "^29.3.1",
+    "ts-jest": "^29.0.3",
+    "typescript": "^4.9.3"
+  },
   "strapi": {
     "isProvider": true
   },
   "author": {
-    "email": "occloxium@gmail.com",
-    "name": "Alexander Bartolomey"
+    "name": "Alexander Bartolomey",
+    "email": "occloxium@gmail.com"
   },
   "maintainers": [
     {
@@ -43,6 +52,8 @@
   },
   "license": "MIT",
   "scripts": {
-    "test": "echo \"no tests yet\""
+    "test": "jest --no-cache",
+    "build": "tsc",
+    "prepublish": "tsc"
   }
 }
