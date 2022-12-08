@@ -78,7 +78,6 @@ export function init({
 }: Config & Record<string, unknown>) {
   let S3: S3Client
   if(!client) {
-    console.log("Creating fresh S3 client")
     // instantiate fresh S3 client, this should be the default at runtime
     const credentials = (() => {
       if (accessKeyId && secretAccessKey) {
