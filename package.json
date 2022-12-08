@@ -54,6 +54,6 @@
   "scripts": {
     "test": "jest --no-cache",
     "build": "tsc",
-    "prepublish": "tsc"
+    "prepack": "tsc"
   }
 }
