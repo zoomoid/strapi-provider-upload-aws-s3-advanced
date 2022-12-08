@@ -33,7 +33,7 @@ describe("aws-s3-advanced provider", () => {
     const buffer = Buffer.from("Test Text from Buffer", "utf-8");
 
     const file: File = {
-      stream: buffer,
+      buffer: buffer,
       ext: ".txt",
       mime: "text/plain",
       hash: "12345",
@@ -67,7 +67,6 @@ describe("aws-s3-advanced provider", () => {
 
     expect(file.url).toBeDefined();
     expect(s3ClientMock).toHaveReceivedCommand(PutObjectCommand);
-    console.log(file.url)
   });
 
   it("should delete an object from s3", async () => {

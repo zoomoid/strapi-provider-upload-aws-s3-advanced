@@ -4,6 +4,7 @@ import {
   S3Client,
 } from "@aws-sdk/client-s3";
 import { Upload } from "@aws-sdk/lib-storage";
+import { Stream } from "stream";
 
 interface Config {
   accessKeyId?: string;
@@ -22,7 +23,7 @@ interface Config {
 }
 
 export interface File {
-  stream?: ReadableStream;
+  stream?: Stream;
   buffer?: any;
   mime?: string;
   ext?: string;
