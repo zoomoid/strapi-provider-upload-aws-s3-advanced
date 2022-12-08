@@ -1,18 +1,36 @@
 # strapi-provider-upload-aws-s3-advanced
 
-## Configurations
+## Configuration
 
-This extends the original configurability of the provider by adding both a `baseUrl`, which may be your CDN URL, which replaces the endpoint returned from AWS with a custom URL, and `prefix`, which does exactly that: prefixes the object's path such that we do not strictly upload into the buckets root directory. This can be used to keep the bucket organized.
+This extends the original configurability of the provider by adding both a
+`baseUrl`, which may be your CDN URL, which replaces the endpoint returned from
+AWS with a custom URL, and `prefix`, which does exactly that: prefixes the
+object's path such that we do not strictly upload into the buckets root
+directory. This can be used to keep the bucket organized, or using a singular bucket
+for multiple services. Other than that you can put e.g. CloudFront Caching in front of the
+bucket and only expose the CloudFront URL to e.g. save traffic costs that come from
+direct bucket access.
 
 Everything else follows the regular strapi-provider-upload-aws-s3 schema.
 
-Your configuration is passed down to the provider. (e.g: `new AWS.S3(config)`). You can see the complete list of options [here](https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/S3.html#constructor-property)
+Your configuration is passed down to the provider. You can see the complete list of options
+[here](https://docs.aws.amazon.com/AWSJavaScriptSDK/v3/latest/clients/client-s3/index.html)
 
-See the [using a provider](https://strapi.io/documentation/developer-docs/latest/development/plugins/upload.html#using-a-provider) documentation for information on installing and using a provider. And see the [environment variables](https://strapi.io/documentation/developer-docs/latest/setup-deployment-guides/configurations.html#environment-variables) for setting and using environment variables in your configs.
+See the [using a
+provider](https://strapi.io/documentation/developer-docs/latest/development/plugins/upload.html#using-a-provider)
+documentation for information on installing and using a provider. And see the
+[environment
+variables](https://strapi.io/documentation/developer-docs/latest/setup-deployment-guides/configurations.html#environment-variables)
+for setting and using environment variables in your configs.
 
-To upload with ACLs, **make sure that the S3 user has abilities "s3:PutObjectACL" in addition to the regular "s3:PutObject" ability**. Otherwise S3 will reject the upload with "Access Denied".
+To upload with ACLs, **make sure that the S3 user has abilities
+"s3:PutObjectACL" in addition to the regular "s3:PutObject" ability**. Otherwise
+S3 will reject the upload with "Access Denied".
 
-If you cannot provide access key and secret, but instead use other (AWS) tools to authenticate to your bucket, omit `providerOptions.accessKeyId` and `providerOptions.secretAccessKey`. For more, see <https://github.com/zoomoid/strapi-provider-upload-aws-s3-advanced/pull/14>.
+If you cannot provide access key and secret, but instead use other (AWS) tools
+to authenticate to your bucket, omit `providerOptions.accessKeyId` and
+`providerOptions.secretAccessKey`. For more, see
+<https://github.com/zoomoid/strapi-provider-upload-aws-s3-advanced/pull/14>.
 
 ### Example
 
@@ -66,11 +84,19 @@ module.exports = ({ env }) => ({
 });
 ```
 
-If you need to extend the configuration of the S3 client with additional properties, put them into `providerOptions.params`. The `params` object is spread into the S3 configuration at initialization, so it will accept any
+If you need to extend the configuration of the S3 client with additional
+properties, put them into `providerOptions.params`. The `params` object is
+spread into the S3 configuration at initialization, so it will accept any
 additional configuration this way.
 
-> Note: If you are migrating from a pre-4.0.0 version (i.e. v3.6.8 or earlier), the `files` relation will include `aws-s3-advanced` as the provider. Previously, the prefix "strapi-upload-provider" was assumed to
-> always be present for upload provider plugins. _This is no longer the case in >= 4.0.0_, hence when uploading with the newer version of this provider, strapi will insert new files with the full provider package name, i.e., `strapi-provider-upload-aws-s3-advanced`. See [Migration](#migration) for details on the required manual work.
+> Note: If you are migrating from a pre-4.0.0 version (i.e. v3.6.8 or earlier),
+> the `files` relation will include `aws-s3-advanced` as the provider.
+> Previously, the prefix "strapi-upload-provider" was assumed to always be
+> present for upload provider plugins. _This is no longer the case in >= 4.0.0_,
+> hence when uploading with the newer version of this provider, strapi will
+> insert new files with the full provider package name, i.e.,
+> `strapi-provider-upload-aws-s3-advanced`. See [Migration](#migration) for
+> details on the required manual work.
 
 #### Image Previews
 
@@ -101,18 +127,50 @@ module.exports = ({ env }) => [
 
 ## Migration
 
-### v4.1.0
+### v5.0.0
 
-To allow for an empty `baseUrl` (#9), we made some adjustments to the way the configuration is parsed: in your `plugins.js`, `env("CDN_BASE_URL")` uses strapi's helper function for parsing ENV variables. If any second argument is omitted,
-`undefined` is returned. Thus, if your ENV does not contain any value for `CDN_BASE_URL`, you are good to go. Undefined `baseUrl` causes the plugin to prepend the cannonic default endpoint of your storage provider, e.g., `https://mystoragebucket.s3.amazonaws.com`.
+You don't need to do anything on your end except updating the dependencies.
 
-**If instead you defined `CDN_BASE_URL` to be `""`, the `env` helper returns that empty string.** Previously, this was treated as the same case as using `undefined`. In some scenarios however you might not want this, e.g., local development. **Thus, we now check explicitly for undefinedness instead of the prior truthiness.**. If you defined `CDN_BASE_URL` to be an empty string and relied upon the prepending of the cannonical default endpoint, change your ENV variable either explicitly to the endpoint's URL **or** make it undefined.
+v5.0.0 rewrites the entire provider in Typescript and introduces Unit Tests,
+among deprecating NodeJS versions lower than v14. Specifically the last aspect
+requires a new major version. Other than that, nothing changed in terms of
+configuration surface.
+
+### v4.1.x
+
+To allow for an empty `baseUrl` (#9), we made some adjustments to the way the
+configuration is parsed: in your `plugins.js`, `env("CDN_BASE_URL")` uses
+strapi's helper function for parsing ENV variables. If any second argument is
+omitted, `undefined` is returned. Thus, if your ENV does not contain any value
+for `CDN_BASE_URL`, you are good to go. Undefined `baseUrl` causes the plugin to
+prepend the cannonic default endpoint of your storage provider, e.g.,
+`https://mystoragebucket.s3.amazonaws.com`.
+
+**If instead you defined `CDN_BASE_URL` to be `""`, the `env` helper returns
+that empty string.** Previously, this was treated as the same case as using
+`undefined`. In some scenarios however you might not want this, e.g., local
+development. **Thus, we now check explicitly for undefinedness instead of the
+prior truthiness.**. If you defined `CDN_BASE_URL` to be an empty string and
+relied upon the prepending of the cannonical default endpoint, change your ENV
+variable either explicitly to the endpoint's URL **or** make it undefined.
 
 ### v3.x to v4.0.x
 
-Strapi now uses the full package name as provider name, as seen in the configuration of the provider in the Example section above. This means that the relation will include different provider names when using the newer version of this provider with strapi >= 4.0.0 on data from pre-4.0.0. In particular, you will find that the pre-4.0.0 `files` will have the provider `aws-s3-advanved`, while the newer ones will have `strapi-provider-aws-s3-advanved`. **If you're not going to change the existing files in your CDN, you will not need to take any actions**. The provider attribute is only used for mapping the handler for creating or deleting files to the handlers defined in _this_ provider. Files will remain readable with the old provider and new files will be added with the new provider name. **Only if you want to delete old files from the new provider, you will be required to adapt the `files` table**.
+Strapi now uses the full package name as provider name, as seen in the
+configuration of the provider in the Example section above. This means that the
+relation will include different provider names when using the newer version of
+this provider with strapi >= 4.0.0 on data from pre-4.0.0. In particular, you
+will find that the pre-4.0.0 `files` will have the provider `aws-s3-advanved`,
+while the newer ones will have `strapi-provider-aws-s3-advanved`. **If you're
+not going to change the existing files in your CDN, you will not need to take
+any actions**. The provider attribute is only used for mapping the handler for
+creating or deleting files to the handlers defined in _this_ provider. Files
+will remain readable with the old provider and new files will be added with the
+new provider name. **Only if you want to delete old files from the new provider,
+you will be required to adapt the `files` table**.
 
-In strapi >= 4.0.0, only SQL databases are officially supported, so we will only provide queries for the supported backends:
+In strapi >= 4.0.0, only SQL databases are officially supported, so we will only
+provide queries for the supported backends:
 
 #### PostgreSQL
 

@@ -59,6 +59,7 @@ $RECYCLE.BIN/
 *.swm
 *.out
 *.pid
+*.tgz
 
 
 ############################
@@ -108,4 +109,9 @@ tests
 __tests__
 jest.config.js
 
+# Our stuff
 .env
+src/
+tsconfig.json
+CODE_OF_CONDUCT.md
+.github
