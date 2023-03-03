@@ -19,7 +19,7 @@ interface Config {
     acl: string;
   }> &
     Record<string, unknown>;
-  client?: any, // allows to pass in an instantiated S3 client into init. Useful for unit testing
+  client?: any; // allows to pass in an instantiated S3 client into init. Useful for unit testing
 }
 
 export interface File {
@@ -77,29 +77,24 @@ export function init({
   client,
   ...config
 }: Config & Record<string, unknown>) {
-  let S3: S3Client
-  if(!client) {
-    // instantiate fresh S3 client, this should be the default at runtime
-    const credentials = (() => {
-      if (accessKeyId && secretAccessKey) {
-        return {
-          credentials: {
-            accessKeyId: accessKeyId,
-            secretAccessKey: secretAccessKey,
-          },
-        };
-      }
-      return {};
-    })();
-
-    S3 = new S3Client({
-      ...credentials,
-      ...config,
-      region,
-    });
-  } else {
-    S3 = client
+  if (!accessKeyId) {
+    throw Error("No AWS_ACCESS_KEY_ID. Set this key in deploy.env");
   }
+
+  if (!secretAccessKey) {
+    throw Error("No AWS_SECRET_ACCESS_KEY. Set this key in deploy.env");
+  }
+
+  const s3Client: S3Client = client
+    ? client
+    : new S3Client({
+        ...config,
+        region,
+        credentials: {
+          accessKeyId,
+          secretAccessKey,
+        },
+      });
 
   const prefix = config.prefix ? normalizePrefix(config.prefix) : "";
   const bucket = config.params.Bucket || config.params.bucket;
@@ -131,15 +126,20 @@ export function init({
       Key: objectPath,
       Body: file.stream || Buffer.from(file.buffer, "binary"),
       ContentType: file.mime,
-      ...acl,
       ...customParams,
+      ...acl,
     };
+
     try {
       const uploadPromise = new Upload({
-        client: S3,
+        client: s3Client,
         params: uploadParams,
       });
-      await uploadPromise.done();
+
+      await uploadPromise.done().then(() => {
+        console.log("Successfully uploaded to S3 Bucket.");
+      });
+
       if (baseUrl === undefined) {
         // assemble virtual-host-based S3 endpoint
         const hostname = [bucket, "s3", region, "amazonaws", "com"].join(".");
@@ -160,6 +160,7 @@ export function init({
     upload(file: File, customParams: Record<string, unknown> = {}) {
       return upload(file, customParams);
     },
+
     /**
      * Deletes an object from the configured bucket
      * @param file File object from strapi controller
@@ -170,7 +171,7 @@ export function init({
       const filename = `${file.hash}${file.ext}`;
       const objectPath = join(prefix, path, filename);
       try {
-        await S3.send(
+        await s3Client.send(
           new DeleteObjectCommand({
             Bucket: bucket,
             Key: objectPath,
