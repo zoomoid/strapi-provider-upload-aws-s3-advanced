@@ -29,25 +29,12 @@
   "strapi": {
     "isProvider": true
   },
-  "author": {
-    "name": "Alexander Bartolomey",
-    "email": "occloxium@gmail.com"
-  },
-  "maintainers": [
-    {
-      "name": "Alexander Bartolomey",
-      "email": "occloxium@gmail.com"
-    }
-  ],
   "repository": {
     "type": "git",
-    "url": "git://github.com/zoomoid/strapi-provider-upload-aws-s3-advanced.git"
-  },
-  "bugs": {
-    "url": "https://github.com/zoomoid/strapi-provider-upload-aws-s3-advanced/issues"
+    "url": "git://github.com/sgedye/strapi-provider-upload-aws-s3-advanced.git"
   },
   "engines": {
-    "node": ">=14.19.1 <=18.x.x",
+    "node": ">=14.15.0 <=18.x.x",
     "npm": ">=6.0.0"
   },
   "license": "MIT",
