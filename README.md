@@ -1,5 +1,13 @@
 # strapi-provider-upload-aws-s3-advanced
 
+> [!IMPORTANT]
+> This package is no longer maintained, most notably because all additions of this plugin were
+> implemented in the upstream plugin as well, namely `baseUrl`, `prefix`, and Typescript support.
+> Strapi maintains the in-tree plugin and keeps it up with NodeJS versions, which *this* plugin
+> no longer receives updates for. Because of breaking changes and active deprecation of the
+> AWS-SDKv2 causing too much work for us, we are retiring any further development of this plugin.
+> Please use strapi's in-tree `upload-aws-s3` provider, if you are on a fairly recent version of strapi.
+
 ## Configuration
 
 This extends the original configurability of the provider by adding both a
